@@ -29,7 +29,6 @@ const expandField = (
   max: number,
   specials: Set<SpecialCharEnum>
 ): number[] => {
-  const result: number[] = [];
 
   if (specials.has(SpecialCharEnum.Any) && field === SpecialCharEnum.Any) {
     return handleAny(min, max);
@@ -40,13 +39,12 @@ const expandField = (
   for (const part of parts) {
     if (specials.has(SpecialCharEnum.Step) && part.includes(SpecialCharEnum.Step)) {
       const [range, stepStr] = part.split(SpecialCharEnum.Step);
-      handleStep(range, stepStr, min, max).forEach((v) => result.push(v));
+      return handleStep(range, stepStr, min, max);
     } else if (specials.has(SpecialCharEnum.Range) && part.includes(SpecialCharEnum.Range)) {
-      handleRange(part, min, max).forEach((v) => result.push(v));
+      return handleRange(part, min, max);
     } else {
-      handleSingleValue(part, min, max).forEach((v) => result.push(v));
+      return handleSingleValue(part, min, max)
     }
   }
-
-  return result;
+  return []
 };
